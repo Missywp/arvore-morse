@@ -31,6 +31,25 @@ public class ArvoreBinariaMorse {
         // no final do código morse, coloca o caractere real
         atual.setCaractere(caractere);
     }
+    public void deleteCaractere(String codigoMorse) {
+        Node atual = raiz;
+
+        // percorre o caminho do código morse
+        for (int i = 0; i < codigoMorse.length(); i++) {
+            char sinalMorse = codigoMorse.charAt(i);
+
+            if (sinalMorse == '.') {
+                if (atual.getEsquerda() == null) return; // não tem nada pra apagar
+                atual = atual.getEsquerda();
+            } else if (sinalMorse == '-') {
+                if (atual.getDireita() == null) return;
+                atual = atual.getDireita();
+            }
+        }
+
+        // quando chega no final do código, apaga o caractere guardado ali
+        atual.setCaractere('\0');
+    }
 
     public char buscarCaractere(String codigoMorse) {
         Node atual = raiz; // começa da raiz
@@ -151,19 +170,22 @@ public class ArvoreBinariaMorse {
 
     // RECURSIVA
     public void exibirArvoreMorse() {
-        exibirRec(raiz, ""); // começa da raiz, codigo morse vazio
+        exibirRecVisual(raiz, "", false, ""); // começa da raiz, caminho vazio
+    }
+    private void exibirRecVisual(Node node, String prefixo, boolean esquerda, String codigoMorse) {
+        if (node == null) return;
+
+        // imprime nó: caractere (ou *) e o caminho Morse
+        System.out.println(prefixo + (esquerda ? "├─" : "└─")
+                + (node.getCaractere() == '\0' ? "*" : node.getCaractere())
+                + " -> " + codigoMorse);
+
+        // novo prefixo para os filhos
+        String novoPrefixo = prefixo + (esquerda ? "│  " : "   ");
+
+        // recursão para filhos, atualizando o caminho Morse
+        exibirRecVisual(node.getEsquerda(), novoPrefixo, true, codigoMorse + ".");
+        exibirRecVisual(node.getDireita(), novoPrefixo, false, codigoMorse + "-");
     }
 
-    private void exibirRec(Node raiz, String codigoMorse) {
-        if (raiz == null) {
-            return; // se nó vazio, volta
-        }
-
-        if (raiz.getCaractere() != '\0') { // se nó tem letra
-            System.out.println(codigoMorse + " -> " + raiz.getCaractere()); // printa o codigo e letra
-        }
-
-        exibirRec(raiz.getEsquerda(), codigoMorse + "."); // vai pra esquerda adicionando ponto
-        exibirRec(raiz.getDireita(), codigoMorse + "-"); // vai pra direita adicionando traço
-    }
 }
