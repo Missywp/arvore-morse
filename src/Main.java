@@ -17,6 +17,7 @@ public class Main {
             System.out.println("2 - Decodificar mensagem morse para texto");
             System.out.println("3 - Buscar caractere por código morse");
             System.out.println("4 - Exibir Árvore");
+            System.out.println("5 - Deletar Caractere");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -58,7 +59,12 @@ public class Main {
                 arvore.exibirArvoreMorse();
             } else if (opcao == 0) {
                 System.out.println("Encerrando."); // sair do programa
-            } else {
+            } else if (opcao == 5) {
+                System.out.print("Digite o código morse do caractere a deletar: ");
+                String codigo = sc.nextLine();
+                arvore.deleteCaractere(codigo);
+                System.out.println("Caractere removido.");
+            }else {
                 System.out.println("Inválido"); // se digitou numero fora do menu
             }
         }
